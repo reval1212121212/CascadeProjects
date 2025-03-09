@@ -1,180 +1,266 @@
 {% extends 'base.html' %}
 
-{% block title %}Nuevo Registro - Seguimiento de Sueño{% endblock %}
+{% block title %}Dashboard - Seguimiento de Sueño{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h2 class="mb-0">Bienestar General</h2>
-        </div>
-        <div class="card-body">
-            <form action="{{ url_for('registrar') }}" method="post">
-                <!-- Calidad del Sueño -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cómo has dormido hoy?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="calidad_sueno" name="calidad_sueno" 
-                               min="1" max="10" value="5">
-                        <span class="ms-2 range-value" id="calidad_sueno_valor">5</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Muy mal (1)</span>
-                        <span>Excelente (10)</span>
-                    </div>
+<div class="dashboard-container">
+    <!-- Sección de métricas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="metric-card sleep-quality" id="sleepQualityMetric">
+                <div class="metric-icon">
+                    <i class="bi bi-moon-stars"></i>
                 </div>
-
-                <!-- Nivel de Estrés -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cuál es tu nivel de estrés actual?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="nivel_estres" name="nivel_estres" 
-                               min="1" max="10" value="5">
-                        <span class="ms-2 range-value" id="nivel_estres_valor">5</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Relajado (1)</span>
-                        <span>Muy estresado (10)</span>
-                    </div>
-                </div>
-
-                <!-- Nivel de Energía -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cuál es tu nivel de energía hoy?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="energia" name="energia" 
-                               min="1" max="10" value="5">
-                        <span class="ms-2 range-value" id="energia_valor">5</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Sin energía (1)</span>
-                        <span>Muy energético (10)</span>
-                    </div>
-                </div>
-
-                <!-- Dolor Muscular -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cuánto dolor muscular sientes hoy?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="dolor_muscular" name="dolor_muscular" 
-                               min="1" max="10" value="1">
-                        <span class="ms-2 range-value" id="dolor_muscular_valor">1</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Sin dolor (1)</span>
-                        <span>Dolor intenso (10)</span>
-                    </div>
-                </div>
-
-                <!-- Nutrición -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cómo calificarías tu nutrición hoy?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="nutricion" name="nutricion" 
-                               min="1" max="10" value="5">
-                        <span class="ms-2 range-value" id="nutricion_valor">5</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Muy mala (1)</span>
-                        <span>Excelente (10)</span>
-                    </div>
-                </div>
-
-                <!-- Hidratación -->
-                <div class="mb-4">
-                    <label class="form-label">¿Cómo calificarías tu hidratación hoy?</label>
-                    <div class="d-flex align-items-center">
-                        <input type="range" class="form-range flex-grow-1" id="hidratacion" name="hidratacion" 
-                               min="1" max="10" value="5">
-                        <span class="ms-2 range-value" id="hidratacion_valor">5</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-muted small">
-                        <span>Muy mala (1)</span>
-                        <span>Excelente (10)</span>
-                    </div>
-                </div>
-
-                <!-- Entrenamiento -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title mb-0">Entrenamiento</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">¿Has entrenado hoy?</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entreno_si" value="Si">
-                                <label class="form-check-label" for="entreno_si">Sí</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entreno_no" value="No" checked>
-                                <label class="form-check-label" for="entreno_no">No</label>
-                            </div>
+                <div class="metric-content">
+                    <h3 class="metric-title">Calidad de Sueño</h3>
+                    <div class="metric-value" id="sleepQualityValue">--</div>
+                    <div class="metric-trend">
+                        <span class="trend-label">Mejor día: </span>
+                        <span class="trend-value" id="bestSleepDay">--</span>
+                        <div class="trend-indicator">
+                            <div class="trend-bar" id="sleepQualityTrend"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card energy" id="energyMetric">
+                <div class="metric-icon">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+                <div class="metric-content">
+                    <h3 class="metric-title">Energía</h3>
+                    <div class="metric-value" id="energyValue">--</div>
+                    <div class="metric-trend">
+                        <span class="trend-label">Mejor día: </span>
+                        <span class="trend-value" id="bestEnergyDay">--</span>
+                        <div class="trend-indicator">
+                            <div class="trend-bar" id="energyTrend"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card hydration" id="hydrationMetric">
+                <div class="metric-icon">
+                    <i class="bi bi-droplet"></i>
+                </div>
+                <div class="metric-content">
+                    <h3 class="metric-title">Hidratación</h3>
+                    <div class="metric-value" id="hydrationValue">--</div>
+                    <div class="metric-trend">
+                        <span class="trend-label">Última semana</span>
+                        <div class="trend-indicator">
+                            <div class="trend-bar" id="hydrationTrend"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card workout">
+                <div class="metric-icon">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <div class="metric-content">
+                    <h3 class="metric-title">Entrenamientos</h3>
+                    <div class="metric-value" id="workoutValue">--</div>
+                    <div class="metric-trend">
+                        <span class="trend-label">Racha: </span>
+                        <span class="trend-value" id="currentStreak">--</span> días
+                        <div class="mt-1">
+                            <small>Mejor racha: <span id="bestStreak">--</span> días</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div id="detalles_entrenamiento" style="display: none;">
-                            <div class="mb-3">
-                                <label for="grupo_muscular" class="form-label">Grupo Muscular</label>
-                                <select class="form-select" id="grupo_muscular" name="grupo_muscular">
-                                    <option value="">Selecciona un grupo...</option>
-                                    <option value="Pecho">Pecho</option>
-                                    <option value="Espalda">Espalda</option>
-                                    <option value="Piernas">Piernas</option>
-                                    <option value="Hombros">Hombros</option>
-                                    <option value="Brazos">Brazos</option>
-                                    <option value="Core">Core</option>
-                                    <option value="Cardio">Cardio</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Intensidad del Entrenamiento</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="intensidad_entrenamiento" 
-                                           name="intensidad_entrenamiento" min="1" max="10" value="5">
-                                    <span class="ms-2 range-value" id="intensidad_entrenamiento_valor">5</span>
+    <div class="row">
+        <!-- Formulario de registro -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Registrar Datos de Hoy</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('registrar') }}" method="post">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="calidad_sueno" class="form-label">Calidad del Sueño</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="calidad_sueno" name="calidad_sueno" min="1" max="10" value="5" oninput="updateValue('calidad_sueno')">
+                                        <span class="badge bg-primary" id="calidad_sueno_value">5</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="nivel_estres" class="form-label">Nivel de Estrés</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="nivel_estres" name="nivel_estres" min="1" max="10" value="5" oninput="updateValue('nivel_estres')">
+                                        <span class="badge bg-primary" id="nivel_estres_value">5</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="energia" class="form-label">Energía</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="energia" name="energia" min="1" max="10" value="5" oninput="updateValue('energia')">
+                                        <span class="badge bg-primary" id="energia_value">5</span>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="duracion_entrenamiento" class="form-label">Duración (minutos)</label>
-                                <input type="number" class="form-control" id="duracion_entrenamiento" 
-                                       name="duracion_entrenamiento" min="1" max="300" value="60">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="dolor_muscular" class="form-label">Dolor Muscular</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="dolor_muscular" name="dolor_muscular" min="1" max="10" value="1" oninput="updateValue('dolor_muscular')">
+                                        <span class="badge bg-primary" id="dolor_muscular_value">1</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="nutricion" class="form-label">Nutrición</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="nutricion" name="nutricion" min="1" max="10" value="5" oninput="updateValue('nutricion')">
+                                        <span class="badge bg-primary" id="nutricion_value">5</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group mb-3">
+                                    <label for="hidratacion" class="form-label">Hidratación</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1 me-2" id="hidratacion" name="hidratacion" min="1" max="10" value="5" oninput="updateValue('hidratacion')">
+                                        <span class="badge bg-primary" id="hidratacion_value">5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">¿Has entrenado hoy?</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entrenamiento_si" value="Si" onchange="toggleEntrenamiento()">
+                                        <label class="form-check-label" for="entrenamiento_si">Sí</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entrenamiento_no" value="No" checked onchange="toggleEntrenamiento()">
+                                        <label class="form-check-label" for="entrenamiento_no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 entrenamiento-details" style="display: none;">
+                                <div class="form-group mb-3">
+                                    <label for="grupo_muscular" class="form-label">Grupo Muscular</label>
+                                    <select class="form-select" id="grupo_muscular" name="grupo_muscular">
+                                        <option value="">Selecciona...</option>
+                                        <option value="Piernas">Piernas</option>
+                                        <option value="Pecho">Pecho</option>
+                                        <option value="Espalda">Espalda</option>
+                                        <option value="Hombros">Hombros</option>
+                                        <option value="Brazos">Brazos</option>
+                                        <option value="Core">Core</option>
+                                        <option value="Cardio">Cardio</option>
+                                        <option value="Full Body">Full Body</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="intensidad_entrenamiento" class="form-label">Intensidad (1-10)</label>
+                                            <input type="number" class="form-control" id="intensidad_entrenamiento" name="intensidad_entrenamiento" min="1" max="10" value="5">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="duracion_entrenamiento" class="form-label">Duración (min)</label>
+                                            <input type="number" class="form-control" id="duracion_entrenamiento" name="duracion_entrenamiento" min="5" value="60">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label for="comentarios" class="form-label">Comentarios</label>
+                            <textarea class="form-control" id="comentarios" name="comentarios" rows="3" placeholder="Añade cualquier comentario o nota relevante sobre tu día..."></textarea>
+                        </div>
+                        
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i> Guardar Registro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Consejos y Recomendaciones -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-lightbulb me-2"></i>Consejos Personalizados</h4>
+                </div>
+                <div class="card-body">
+                    <div id="tipsContainer">
+                        <!-- Los consejos se cargarán dinámicamente -->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Comentarios -->
-                <div class="mb-4">
-                    <label for="comentarios" class="form-label">Comentarios adicionales (opcional)</label>
-                    <textarea class="form-control" id="comentarios" name="comentarios" rows="3" 
-                              placeholder="Escribe aquí cualquier comentario adicional..."></textarea>
+            </div>
+            
+            <!-- Filtros de fecha -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-calendar-week me-2"></i>Filtrar por Período</h4>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Guardar Registro</button>
-            </form>
+                <div class="card-body">
+                    <div class="btn-group w-100" role="group">
+                        <button type="button" class="btn btn-outline-primary date-filter-btn active" data-filter="week">Semana</button>
+                        <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="month">Mes</button>
+                        <button type="button" class="btn btn-outline-primary date-filter-btn" data-filter="year">Año</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
-{% block scripts %}
+{% block extra_js %}
 <script>
-    // Actualizar valores de los rangos
-    document.querySelectorAll('input[type="range"]').forEach(function(range) {
-        range.addEventListener('input', function() {
-            document.getElementById(this.id + '_valor').textContent = this.value;
-        });
-    });
-
+    // Actualizar valores de los sliders
+    function updateValue(id) {
+        const slider = document.getElementById(id);
+        const output = document.getElementById(id + '_value');
+        output.textContent = slider.value;
+    }
+    
     // Mostrar/ocultar detalles de entrenamiento
-    document.querySelectorAll('input[name="entrenamiento_hoy"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            document.getElementById('detalles_entrenamiento').style.display = 
-                this.value === 'Si' ? 'block' : 'none';
-        });
-    });
+    function toggleEntrenamiento() {
+        const entrenamientoSi = document.getElementById('entrenamiento_si');
+        const detallesEntrenamiento = document.querySelector('.entrenamiento-details');
+        
+        if (entrenamientoSi.checked) {
+            detallesEntrenamiento.style.display = 'block';
+        } else {
+            detallesEntrenamiento.style.display = 'none';
+        }
+    }
 </script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

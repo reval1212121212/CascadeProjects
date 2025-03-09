@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -43,29 +43,40 @@
             </div>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('exportar_datos') }}" class="btn btn-success mb-4">
+                <i class="fas fa-file-export"></i> Exportar Datos
+            </a>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const datos = {{ datos|tojson|safe }};
-    const fechas = datos.map(d => d.fecha);
     
     // Gráfico de Calidad del Sueño y Energía
     new Chart(document.getElementById('sleepEnergyChart'), {
         type: 'line',
         data: {
-            labels: fechas,
+            labels: datos.fechas,
             datasets: [{
                 label: 'Calidad del Sueño',
-                data: datos.map(d => d.calidad_sueno),
+                data: datos.calidad_sueno,
                 borderColor: '#007bff',
-                tension: 0.1
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                tension: 0.1,
+                fill: true
             }, {
                 label: 'Energía',
-                data: datos.map(d => d.energia),
+                data: datos.energia,
                 borderColor: '#28a745',
-                tension: 0.1
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                tension: 0.1,
+                fill: true
             }]
         },
         options: {
@@ -83,17 +94,21 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(document.getElementById('stressPainChart'), {
         type: 'line',
         data: {
-            labels: fechas,
+            labels: datos.fechas,
             datasets: [{
                 label: 'Nivel de Estrés',
-                data: datos.map(d => d.nivel_estres),
+                data: datos.nivel_estres,
                 borderColor: '#17a2b8',
-                tension: 0.1
+                backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                tension: 0.1,
+                fill: true
             }, {
                 label: 'Dolor Muscular',
-                data: datos.map(d => d.dolor_muscular),
+                data: datos.dolor_muscular,
                 borderColor: '#dc3545',
-                tension: 0.1
+                backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                tension: 0.1,
+                fill: true
             }]
         },
         options: {
@@ -111,17 +126,21 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(document.getElementById('nutritionChart'), {
         type: 'line',
         data: {
-            labels: fechas,
+            labels: datos.fechas,
             datasets: [{
                 label: 'Nutrición',
-                data: datos.map(d => d.nutricion),
+                data: datos.nutricion,
                 borderColor: '#ffc107',
-                tension: 0.1
+                backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                tension: 0.1,
+                fill: true
             }, {
                 label: 'Hidratación',
-                data: datos.map(d => d.hidratacion),
+                data: datos.hidratacion,
                 borderColor: '#0dcaf0',
-                tension: 0.1
+                backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                tension: 0.1,
+                fill: true
             }]
         },
         options: {
@@ -136,13 +155,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gráfico de Intensidad de Entrenamiento
+    const entrenamientoData = [];
+    // Procesamos los datos para mostrar solo los días con entrenamiento
+    for (let i = 0; i < datos.fechas.length; i++) {
+        const entrenamiento = datos.entrenamientos.find(e => e.fecha === datos.fechas[i]);
+        entrenamientoData.push(entrenamiento ? entrenamiento.intensidad : 0);
+    }
+    
     new Chart(document.getElementById('trainingChart'), {
         type: 'bar',
         data: {
-            labels: fechas,
+            labels: datos.fechas,
             datasets: [{
                 label: 'Intensidad',
-                data: datos.map(d => d.entrenamiento_hoy === 'Si' ? d.intensidad_entrenamiento : 0),
+                data: entrenamientoData,
                 backgroundColor: '#6f42c1'
             }]
         },
