@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}Historial - Seguimiento de Sueño{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Historial de Registros</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Calidad del Sueño</th>
+                    <th>Nivel de Estrés</th>
+                    <th>Energía</th>
+                    <th>Dolor Muscular</th>
+                    <th>Nutrición</th>
+                    <th>Hidratación</th>
+                    <th>Entrenamiento</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro['fecha'] }}</td>
+                    <td>{{ registro['hora'] }}</td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['calidad_sueno']|int * 10 }}%; background-color: #007bff;" aria-valuenow="{{ registro['calidad_sueno'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['calidad_sueno'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['nivel_estres']|int * 10 }}%; background-color: #17a2b8;" aria-valuenow="{{ registro['nivel_estres'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['nivel_estres'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['energia']|int * 10 }}%; background-color: #28a745;" aria-valuenow="{{ registro['energia'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['energia'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['dolor_muscular']|int * 10 }}%; background-color: #dc3545;" aria-valuenow="{{ registro['dolor_muscular'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['dolor_muscular'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['nutricion']|int * 10 }}%; background-color: #ffc107;" aria-valuenow="{{ registro['nutricion'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['nutricion'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ registro['hidratacion']|int * 10 }}%; background-color: #0dcaf0;" aria-valuenow="{{ registro['hidratacion'] }}" aria-valuemin="1" aria-valuemax="10">
+                                {{ registro['hidratacion'] }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {% if registro['entrenamiento_hoy'] == 'Si' %}
+                            <span class="badge bg-success">Sí</span>
+                        {% else %}
+                            <span class="badge bg-secondary">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" 
+                                data-bs-target="#modal-{{ loop.index }}">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                        
+                        <!-- Modal con detalles -->
+                        <div class="modal fade" id="modal-{{ loop.index }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detalles del Registro</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6>Fecha y Hora</h6>
+                                        <p>{{ registro['fecha'] }} a las {{ registro['hora'] }}</p>
+                                        
+                                        <h6>Métricas de Bienestar</h6>
+                                        <ul class="list-group mb-3">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Calidad del Sueño:</span>
+                                                <strong>{{ registro['calidad_sueno'] }}/10</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Nivel de Estrés:</span>
+                                                <strong>{{ registro['nivel_estres'] }}/10</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Energía:</span>
+                                                <strong>{{ registro['energia'] }}/10</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Dolor Muscular:</span>
+                                                <strong>{{ registro['dolor_muscular'] }}/10</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Nutrición:</span>
+                                                <strong>{{ registro['nutricion'] }}/10</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Hidratación:</span>
+                                                <strong>{{ registro['hidratacion'] }}/10</strong>
+                                            </li>
+                                        </ul>
+                                        
+                                        {% if registro['entrenamiento_hoy'] == 'Si' %}
+                                            <h6>Detalles del Entrenamiento</h6>
+                                            <ul class="list-group mb-3">
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <span>Grupo Muscular:</span>
+                                                    <strong>{{ registro['grupo_muscular'] }}</strong>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <span>Intensidad:</span>
+                                                    <strong>{{ registro['intensidad_entrenamiento'] }}/10</strong>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <span>Duración:</span>
+                                                    <strong>{{ registro['duracion_entrenamiento'] }} minutos</strong>
+                                                </li>
+                                            </ul>
+                                        {% endif %}
+                                        
+                                        {% if registro['comentarios'] %}
+                                            <h6>Comentarios</h6>
+                                            <p class="mb-0">{{ registro['comentarios'] }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

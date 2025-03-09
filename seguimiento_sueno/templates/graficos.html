@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Gráficos - Seguimiento de Sueño{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Gráficos de Evolución</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Calidad del Sueño y Energía</h5>
+                    <canvas id="sleepEnergyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Estrés y Dolor Muscular</h5>
+                    <canvas id="stressPainChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Nutrición e Hidratación</h5>
+                    <canvas id="nutritionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Intensidad de Entrenamiento</h5>
+                    <canvas id="trainingChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const datos = {{ datos|tojson|safe }};
+    const fechas = datos.map(d => d.fecha);
+    
+    // Gráfico de Calidad del Sueño y Energía
+    new Chart(document.getElementById('sleepEnergyChart'), {
+        type: 'line',
+        data: {
+            labels: fechas,
+            datasets: [{
+                label: 'Calidad del Sueño',
+                data: datos.map(d => d.calidad_sueno),
+                borderColor: '#007bff',
+                tension: 0.1
+            }, {
+                label: 'Energía',
+                data: datos.map(d => d.energia),
+                borderColor: '#28a745',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+
+    // Gráfico de Estrés y Dolor Muscular
+    new Chart(document.getElementById('stressPainChart'), {
+        type: 'line',
+        data: {
+            labels: fechas,
+            datasets: [{
+                label: 'Nivel de Estrés',
+                data: datos.map(d => d.nivel_estres),
+                borderColor: '#17a2b8',
+                tension: 0.1
+            }, {
+                label: 'Dolor Muscular',
+                data: datos.map(d => d.dolor_muscular),
+                borderColor: '#dc3545',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+
+    // Gráfico de Nutrición e Hidratación
+    new Chart(document.getElementById('nutritionChart'), {
+        type: 'line',
+        data: {
+            labels: fechas,
+            datasets: [{
+                label: 'Nutrición',
+                data: datos.map(d => d.nutricion),
+                borderColor: '#ffc107',
+                tension: 0.1
+            }, {
+                label: 'Hidratación',
+                data: datos.map(d => d.hidratacion),
+                borderColor: '#0dcaf0',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+
+    // Gráfico de Intensidad de Entrenamiento
+    new Chart(document.getElementById('trainingChart'), {
+        type: 'bar',
+        data: {
+            labels: fechas,
+            datasets: [{
+                label: 'Intensidad',
+                data: datos.map(d => d.entrenamiento_hoy === 'Si' ? d.intensidad_entrenamiento : 0),
+                backgroundColor: '#6f42c1'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

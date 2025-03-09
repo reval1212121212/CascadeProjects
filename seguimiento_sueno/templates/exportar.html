@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Exportar Datos - Seguimiento de Sueño{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Exportar Datos para Predicción</h2>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Datos de Seguimiento</h3>
+                </div>
+                <div class="card-body">
+                    <p>Exporta tus datos de seguimiento de sueño, estrés y entrenamiento para utilizarlos en el modelo de predicción de pesos.</p>
+                    <p>El archivo CSV generado incluirá:</p>
+                    <ul>
+                        <li>Registros de sueño (horas, calidad)</li>
+                        <li>Niveles de estrés</li>
+                        <li>Ejercicios realizados</li>
+                        <li>Notas y comentarios</li>
+                    </ul>
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a href="{{ url_for('generar_csv_prediccion') }}" class="btn btn-primary">
+                            <i class="bi bi-download me-2"></i>Generar CSV para Predicción
+                        </a>
+                        <a href="{{ url_for('historico') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Volver al Historial
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

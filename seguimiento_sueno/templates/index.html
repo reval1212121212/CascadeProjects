@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuevo Registro - Seguimiento de Sueño{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Bienestar General</h2>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('registrar') }}" method="post">
+                <!-- Calidad del Sueño -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cómo has dormido hoy?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="calidad_sueno" name="calidad_sueno" 
+                               min="1" max="10" value="5">
+                        <span class="ms-2 range-value" id="calidad_sueno_valor">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Muy mal (1)</span>
+                        <span>Excelente (10)</span>
+                    </div>
+                </div>
+
+                <!-- Nivel de Estrés -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cuál es tu nivel de estrés actual?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="nivel_estres" name="nivel_estres" 
+                               min="1" max="10" value="5">
+                        <span class="ms-2 range-value" id="nivel_estres_valor">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Relajado (1)</span>
+                        <span>Muy estresado (10)</span>
+                    </div>
+                </div>
+
+                <!-- Nivel de Energía -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cuál es tu nivel de energía hoy?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="energia" name="energia" 
+                               min="1" max="10" value="5">
+                        <span class="ms-2 range-value" id="energia_valor">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Sin energía (1)</span>
+                        <span>Muy energético (10)</span>
+                    </div>
+                </div>
+
+                <!-- Dolor Muscular -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cuánto dolor muscular sientes hoy?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="dolor_muscular" name="dolor_muscular" 
+                               min="1" max="10" value="1">
+                        <span class="ms-2 range-value" id="dolor_muscular_valor">1</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Sin dolor (1)</span>
+                        <span>Dolor intenso (10)</span>
+                    </div>
+                </div>
+
+                <!-- Nutrición -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cómo calificarías tu nutrición hoy?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="nutricion" name="nutricion" 
+                               min="1" max="10" value="5">
+                        <span class="ms-2 range-value" id="nutricion_valor">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Muy mala (1)</span>
+                        <span>Excelente (10)</span>
+                    </div>
+                </div>
+
+                <!-- Hidratación -->
+                <div class="mb-4">
+                    <label class="form-label">¿Cómo calificarías tu hidratación hoy?</label>
+                    <div class="d-flex align-items-center">
+                        <input type="range" class="form-range flex-grow-1" id="hidratacion" name="hidratacion" 
+                               min="1" max="10" value="5">
+                        <span class="ms-2 range-value" id="hidratacion_valor">5</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>Muy mala (1)</span>
+                        <span>Excelente (10)</span>
+                    </div>
+                </div>
+
+                <!-- Entrenamiento -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Entrenamiento</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">¿Has entrenado hoy?</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entreno_si" value="Si">
+                                <label class="form-check-label" for="entreno_si">Sí</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="entrenamiento_hoy" id="entreno_no" value="No" checked>
+                                <label class="form-check-label" for="entreno_no">No</label>
+                            </div>
+                        </div>
+
+                        <div id="detalles_entrenamiento" style="display: none;">
+                            <div class="mb-3">
+                                <label for="grupo_muscular" class="form-label">Grupo Muscular</label>
+                                <select class="form-select" id="grupo_muscular" name="grupo_muscular">
+                                    <option value="">Selecciona un grupo...</option>
+                                    <option value="Pecho">Pecho</option>
+                                    <option value="Espalda">Espalda</option>
+                                    <option value="Piernas">Piernas</option>
+                                    <option value="Hombros">Hombros</option>
+                                    <option value="Brazos">Brazos</option>
+                                    <option value="Core">Core</option>
+                                    <option value="Cardio">Cardio</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Intensidad del Entrenamiento</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="range" class="form-range flex-grow-1" id="intensidad_entrenamiento" 
+                                           name="intensidad_entrenamiento" min="1" max="10" value="5">
+                                    <span class="ms-2 range-value" id="intensidad_entrenamiento_valor">5</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="duracion_entrenamiento" class="form-label">Duración (minutos)</label>
+                                <input type="number" class="form-control" id="duracion_entrenamiento" 
+                                       name="duracion_entrenamiento" min="1" max="300" value="60">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comentarios -->
+                <div class="mb-4">
+                    <label for="comentarios" class="form-label">Comentarios adicionales (opcional)</label>
+                    <textarea class="form-control" id="comentarios" name="comentarios" rows="3" 
+                              placeholder="Escribe aquí cualquier comentario adicional..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Actualizar valores de los rangos
+    document.querySelectorAll('input[type="range"]').forEach(function(range) {
+        range.addEventListener('input', function() {
+            document.getElementById(this.id + '_valor').textContent = this.value;
+        });
+    });
+
+    // Mostrar/ocultar detalles de entrenamiento
+    document.querySelectorAll('input[name="entrenamiento_hoy"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.getElementById('detalles_entrenamiento').style.display = 
+                this.value === 'Si' ? 'block' : 'none';
+        });
+    });
+</script>
+{% endblock %}
